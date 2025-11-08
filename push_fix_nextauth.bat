@@ -47,11 +47,18 @@ if %ERRORLEVEL% NEQ 0 (
     exit /b 1
 )
 
+git add nextjs_space/lib/db.ts
+if %ERRORLEVEL% NEQ 0 (
+    echo [ERROR] No se pudo agregar db.ts
+    pause
+    exit /b 1
+)
+
 echo [OK] Archivos agregados
 echo.
 
 echo [INFO] Haciendo commit...
-git commit -m "fix: Hacer ruta de NextAuth dinámica para evitar errores en build"
+git commit -m "fix: Inicialización lazy de NextAuth y Prisma para evitar errores en build"
 if %ERRORLEVEL% NEQ 0 (
     echo [ERROR] No se pudo hacer el commit
     pause
@@ -91,8 +98,9 @@ if %ERRORLEVEL% EQU 0 (
     echo [OK] ========================================
     echo.
     echo Cambios realizados:
-    echo - route.ts: Agregada configuracion dynamic y runtime
-    echo - auth.ts: GoogleProvider opcional y secret con fallback
+    echo - route.ts: Handler lazy y configuracion dynamic/runtime/revalidate
+    echo - auth.ts: PrismaAdapter lazy para evitar problemas en build
+    echo - db.ts: Prisma Client lazy con Proxy para evitar conexiones en build
     echo.
     echo Esto soluciona el error:
     echo "Failed to collect page data for /api/auth/[...nextauth]"

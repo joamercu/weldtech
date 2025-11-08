@@ -31,8 +31,22 @@ function logAuthAttempt(
   }
 }
 
+// Función helper para obtener el adapter de manera lazy
+function getAdapter() {
+  // Solo inicializar PrismaAdapter si no estamos en build time
+  if (process.env.NEXT_PHASE === 'phase-production-build') {
+    return undefined;
+  }
+  try {
+    return PrismaAdapter(prisma);
+  } catch (error) {
+    console.warn('⚠️ [AUTH] PrismaAdapter no disponible durante el build:', error);
+    return undefined;
+  }
+}
+
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
+  adapter: getAdapter(),
   session: {
     strategy: 'jwt',
   },
