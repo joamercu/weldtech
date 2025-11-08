@@ -38,11 +38,21 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL || 'file:./prisma/dev.db' }}
 
       - name: Ejecutar lint
+        id: lint
         working-directory: ./nextjs_space
         run: npm run lint || true
         continue-on-error: true
 
+      - name: Notificar estado de lint a Vercel
+        if: always()
+        uses: vercel/repository-dispatch/actions/status@v1
+        with:
+          name: Vercel - weldtech-wnkr: lint
+          status: ${{ steps.lint.outcome == 'success' && 'success' || 'failure' }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build de producción
+        id: build
         working-directory: ./nextjs_space
         run: npm run build
         env:
@@ -52,10 +62,19 @@ jobs:
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
 
+      - name: Notificar estado de build a Vercel
+        if: always()
+        uses: vercel/repository-dispatch/actions/status@v1
+        with:
+          name: Vercel - weldtech-wnkr: build
+          status: ${{ steps.build.outcome == 'success' && 'success' || 'failure' }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Instalar Vercel CLI
         run: npm install -g vercel@latest
 
       - name: Desplegar en Vercel
+        id: deploy
         working-directory: ./nextjs_space
         run: |
           vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --yes
@@ -63,6 +82,14 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
         continue-on-error: true
+
+      - name: Notificar estado de despliegue a Vercel
+        if: always()
+        uses: vercel/repository-dispatch/actions/status@v1
+        with:
+          name: Vercel - weldtech-wnkr: deploy
+          status: ${{ steps.deploy.outcome == 'success' && 'success' || 'failure' }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Comentario en PR (si aplica)
         if: github.event_name == 'pull_request'
