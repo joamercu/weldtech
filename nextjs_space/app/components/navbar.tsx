@@ -5,8 +5,10 @@ import { useState } from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { MessageCircle, Menu, X, ChevronDown, Wrench, User, LogOut, LogIn, UserPlus, BookOpen } from 'lucide-react'
+import { MessageCircle, Menu, X, ChevronDown, Wrench, User, LogOut, LogIn, UserPlus, BookOpen, Code2, AlertCircle } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useDevelopmentModeContext } from '@/contexts/development-mode-context'
+import { useToast } from '@/hooks/use-toast'
 
 export default function Navbar() {
   const { data: session, status } = useSession() || {}
@@ -15,6 +17,42 @@ export default function Navbar() {
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   
   const isAuthenticated = !!session?.user
+  
+  // Contexto del Modo Desarrollo
+  const { 
+    isDevelopmentMode, 
+    isAvailable, 
+    toggleDevelopmentMode 
+  } = useDevelopmentModeContext()
+  
+  // Hook para mostrar notificaciones
+  const { toast } = useToast()
+  
+  // Función para manejar el clic en el botón Modo Desarrollo
+  const handleDevelopmentModeClick = () => {
+    if (!isAvailable) {
+      toast({
+        title: 'Modo Desarrollo no disponible',
+        description: 'El Modo Desarrollo solo está disponible en la versión gratuita de Vercel y para usuarios no registrados.',
+        variant: 'destructive',
+      })
+      return
+    }
+    
+    toggleDevelopmentMode()
+    
+    if (isDevelopmentMode) {
+      toast({
+        title: 'Modo Desarrollo desactivado',
+        description: 'Has desactivado el Modo Desarrollo. Las funcionalidades premium ya no están disponibles.',
+      })
+    } else {
+      toast({
+        title: 'Modo Desarrollo activado',
+        description: 'Has activado el Modo Desarrollo. Todas las funcionalidades premium están ahora disponibles.',
+      })
+    }
+  }
 
   const navLinks = [
     { href: '/infografia', label: 'Infografía' },
@@ -111,6 +149,28 @@ export default function Navbar() {
               <MessageCircle size={18} />
               Contactar
             </Link>
+            
+            {/* Botón Modo Desarrollo - Solo visible para usuarios no autenticados */}
+            {!isAuthenticated && isAvailable && (
+              <button
+                onClick={handleDevelopmentModeClick}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                  isDevelopmentMode
+                    ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:shadow-lg hover:shadow-green-600/50'
+                    : 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:shadow-lg hover:shadow-purple-600/50'
+                }`}
+                title={isDevelopmentMode ? 'Desactivar Modo Desarrollo' : 'Activar Modo Desarrollo'}
+                aria-label={isDevelopmentMode ? 'Desactivar Modo Desarrollo' : 'Activar Modo Desarrollo'}
+              >
+                <Code2 size={18} />
+                <span className="hidden lg:inline">
+                  {isDevelopmentMode ? 'Modo Desarrollo ON' : 'Modo Desarrollo'}
+                </span>
+                <span className="lg:hidden">
+                  {isDevelopmentMode ? 'Dev ON' : 'Dev'}
+                </span>
+              </button>
+            )}
             
             {/* Auth Buttons */}
             {!isAuthenticated ? (
@@ -250,6 +310,28 @@ export default function Navbar() {
                   <MessageCircle size={18} />
                   Contactar por WhatsApp
                 </Link>
+                
+                {/* Botón Modo Desarrollo Mobile - Solo visible para usuarios no autenticados */}
+                {!isAuthenticated && isAvailable && (
+                  <button
+                    onClick={() => {
+                      handleDevelopmentModeClick()
+                      setMobileMenuOpen(false)
+                    }}
+                    className={`w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-300 mt-4 ${
+                      isDevelopmentMode
+                        ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:shadow-lg hover:shadow-green-600/50'
+                        : 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:shadow-lg hover:shadow-purple-600/50'
+                    }`}
+                    title={isDevelopmentMode ? 'Desactivar Modo Desarrollo' : 'Activar Modo Desarrollo'}
+                    aria-label={isDevelopmentMode ? 'Desactivar Modo Desarrollo' : 'Activar Modo Desarrollo'}
+                  >
+                    <Code2 size={18} />
+                    <span>
+                      {isDevelopmentMode ? 'Modo Desarrollo ON' : 'Modo Desarrollo'}
+                    </span>
+                  </button>
+                )}
                 
                 {/* Mobile Auth Buttons */}
                 <div className="pt-4 border-t border-white/10 mt-4">

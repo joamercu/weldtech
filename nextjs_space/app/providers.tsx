@@ -2,7 +2,14 @@
 'use client';
 
 import { SessionProvider } from 'next-auth/react';
+import { DevelopmentModeProvider } from '@/contexts/development-mode-context';
 
 export function Providers({ children }: { children: React.ReactNode }) {
-  return <SessionProvider>{children}</SessionProvider>;
+  return (
+    <SessionProvider>
+      <DevelopmentModeProvider>
+        {children}
+      </DevelopmentModeProvider>
+    </SessionProvider>
+  );
 }
