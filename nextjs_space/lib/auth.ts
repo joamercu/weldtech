@@ -31,10 +31,20 @@ function logAuthAttempt(
   }
 }
 
+// Función helper para detectar si estamos en build time
+function isBuildTime(): boolean {
+  return (
+    process.env.NEXT_PHASE === 'phase-production-build' ||
+    process.env.NEXT_PHASE === 'phase-development-build' ||
+    process.env.NEXT_PHASE === 'phase-export' ||
+    (typeof process.env.NEXT_PHASE !== 'undefined' && process.env.NEXT_PHASE.includes('build'))
+  );
+}
+
 // Función helper para obtener el adapter de manera lazy
 function getAdapter() {
   // Solo inicializar PrismaAdapter si no estamos en build time
-  if (process.env.NEXT_PHASE === 'phase-production-build') {
+  if (isBuildTime()) {
     return undefined;
   }
   try {
@@ -45,8 +55,10 @@ function getAdapter() {
   }
 }
 
-export const authOptions: NextAuthOptions = {
-  adapter: getAdapter(),
+// Función para obtener authOptions de manera lazy
+function getAuthOptions(): NextAuthOptions {
+  return {
+    adapter: getAdapter(),
   session: {
     strategy: 'jwt',
   },
@@ -179,4 +191,38 @@ export const authOptions: NextAuthOptions = {
       }
     },
   },
-};
+  };
+}
+
+// Exportar función getter para authOptions de manera lazy
+let _authOptions: NextAuthOptions | null = null;
+
+export function getAuthOptionsLazy(): NextAuthOptions {
+  if (!_authOptions) {
+    _authOptions = getAuthOptions();
+  }
+  return _authOptions;
+}
+
+// Exportar authOptions como constante para compatibilidad
+// Durante el build, retornar un objeto mock para evitar inicialización
+// En runtime, se inicializa de manera lazy cuando se accede
+export const authOptions: NextAuthOptions = (() => {
+  // Durante el build, retornar un objeto mock mínimo
+  if (isBuildTime()) {
+    return {
+      adapter: undefined,
+      session: { strategy: 'jwt' },
+      pages: {
+        signIn: '/auth/login',
+        signOut: '/auth/login',
+        error: '/auth/login',
+      },
+      providers: [],
+      callbacks: {},
+      secret: 'fallback-secret-for-build',
+    } as NextAuthOptions;
+  }
+  // En runtime, inicializar normalmente
+  return getAuthOptions();
+})();

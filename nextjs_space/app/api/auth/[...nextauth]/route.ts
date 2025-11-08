@@ -1,5 +1,5 @@
 import NextAuth from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { getAuthOptionsLazy } from '@/lib/auth';
 import type { NextRequest } from 'next/server';
 
 // Evitar recopilación de datos durante el build
@@ -12,6 +12,8 @@ let handler: ReturnType<typeof NextAuth> | null = null;
 
 function getHandler() {
   if (!handler) {
+    // Obtener authOptions de manera lazy solo cuando se necesite
+    const authOptions = getAuthOptionsLazy();
     handler = NextAuth(authOptions);
   }
   return handler;
