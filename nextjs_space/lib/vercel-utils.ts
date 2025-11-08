@@ -66,17 +66,32 @@ export function isVercelFreeTier(): boolean {
  * El modo desarrollo solo está disponible si:
  * 1. Estamos en la versión gratuita de Vercel
  * 2. El usuario NO está autenticado
+ * 3. Edge Config lo permite (si está configurado)
  * 
  * @param isAuthenticated - Indica si el usuario está autenticado
+ * @param edgeConfigEnabled - Indica si Edge Config permite el modo desarrollo (opcional)
  * @returns true si el modo desarrollo debe estar disponible
  */
-export function isDevelopmentModeAvailable(isAuthenticated: boolean): boolean {
+export function isDevelopmentModeAvailable(
+  isAuthenticated: boolean, 
+  edgeConfigEnabled?: boolean | null
+): boolean {
   // El modo desarrollo NO está disponible para usuarios autenticados
   if (isAuthenticated) {
     return false;
   }
   
-  // Solo disponible en la versión gratuita de Vercel
+  // Si Edge Config está configurado y deshabilitado, no permitir
+  if (edgeConfigEnabled === false) {
+    return false;
+  }
+  
+  // Si Edge Config está habilitado explícitamente, permitir
+  if (edgeConfigEnabled === true) {
+    return isVercelFreeTier();
+  }
+  
+  // Por defecto, solo disponible en la versión gratuita de Vercel
   return isVercelFreeTier();
 }
 

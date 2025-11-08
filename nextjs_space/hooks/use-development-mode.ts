@@ -17,6 +17,9 @@ export function useDevelopmentMode(isAuthenticated: boolean) {
   // Clave para almacenar el estado en localStorage
   const STORAGE_KEY = 'weldtech_development_mode';
   
+  // Estado para Edge Config
+  const [edgeConfigEnabled, setEdgeConfigEnabled] = useState<boolean | null>(null);
+  
   // Estado inicial: lee desde localStorage o false por defecto
   const [isDevelopmentMode, setIsDevelopmentMode] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false;
@@ -30,8 +33,34 @@ export function useDevelopmentMode(isAuthenticated: boolean) {
     }
   });
 
+  // Consultar Edge Config al montar el componente
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const checkEdgeConfig = async () => {
+      try {
+        const hostname = window.location.hostname;
+        const response = await fetch(`/api/edge-config?key=developmentMode&hostname=${encodeURIComponent(hostname)}`);
+        
+        if (response.ok) {
+          const data = await response.json();
+          setEdgeConfigEnabled(data.enabled === true);
+        } else {
+          // Si Edge Config no está disponible, usar comportamiento por defecto
+          setEdgeConfigEnabled(null);
+        }
+      } catch (error) {
+        console.error('Error al consultar Edge Config:', error);
+        // Si hay error, usar comportamiento por defecto
+        setEdgeConfigEnabled(null);
+      }
+    };
+
+    checkEdgeConfig();
+  }, []);
+
   // Verificar si el modo desarrollo está disponible
-  const isAvailable = isDevelopmentModeAvailable(isAuthenticated);
+  const isAvailable = isDevelopmentModeAvailable(isAuthenticated, edgeConfigEnabled);
 
   // Efecto para sincronizar con localStorage
   useEffect(() => {
