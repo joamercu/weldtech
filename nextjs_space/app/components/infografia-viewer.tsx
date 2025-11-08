@@ -184,11 +184,22 @@ export default function InfografiaViewer() {
   const infographicRef = useRef<HTMLDivElement>(null)
   const [isExporting, setIsExporting] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [windowWidth, setWindowWidth] = useState(0)
   
   const isAuthenticated = !!session?.user
 
   useEffect(() => {
     setMounted(true)
+    
+    // Detectar ancho de ventana para QR responsivo
+    const updateWindowWidth = () => {
+      setWindowWidth(window.innerWidth)
+    }
+    
+    updateWindowWidth()
+    window.addEventListener('resize', updateWindowWidth)
+    
+    return () => window.removeEventListener('resize', updateWindowWidth)
   }, [])
 
   useEffect(() => {
@@ -355,7 +366,7 @@ export default function InfografiaViewer() {
   }
 
   return (
-    <div className="min-h-screen bg-primary mesh-gradient flex flex-col">
+    <div className="min-h-screen bg-primary mesh-gradient flex flex-col overflow-x-hidden">
       <Navbar />
       
       {/* Export Controls */}
@@ -435,23 +446,24 @@ export default function InfografiaViewer() {
       </div>
 
       {/* Infographic Content */}
-      <div className="max-w-5xl mx-auto px-4 py-8 flex-1">
+      <div className="w-full max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8 flex-1 overflow-x-hidden">
         <div 
           ref={infographicRef}
           data-infographic
-          className="bg-primary print-optimize rounded-2xl shadow-2xl border border-gray-800/50"
+          className="bg-primary print-optimize rounded-xl sm:rounded-2xl shadow-2xl border border-gray-800/50 w-full mx-auto"
           style={{ 
             // Dimensiones A3 exactas: 297mm x 420mm (relación de aspecto 1:1.414)
+            // Responsive: se adapta al ancho disponible pero mantiene proporción A3
             width: '100%',
             maxWidth: '1122px', // Ancho A3 (297mm a 96 DPI)
-            minHeight: '1587px', // Altura A3 (420mm a 96 DPI)
+            minHeight: 'auto', // Altura automática para evitar desbordamiento
             aspectRatio: '297/420', // Relación de aspecto A3 correcta
             margin: '0 auto',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'flex-start',
             alignItems: 'stretch',
-            padding: '2.5rem 2.5rem 3rem 2.5rem', // Más padding inferior para evitar cortes
+            padding: 'clamp(1rem, 3vw, 2.5rem) clamp(1rem, 3vw, 2.5rem) clamp(1.5rem, 4vw, 3rem) clamp(1rem, 3vw, 2.5rem)', // Padding responsivo
             boxSizing: 'border-box',
             background: 'linear-gradient(135deg, #0F1216 0%, #1a1d24 100%)',
             overflow: 'visible' // Permitir que el contenido se vea completo
@@ -483,29 +495,27 @@ export default function InfografiaViewer() {
             {/* Línea decorativa superior */}
             <div className="h-1 w-32 bg-gradient-to-r from-transparent via-primary-accent to-transparent mx-auto mb-4"></div>
             
-            <h1 className="text-4xl lg:text-5xl font-bold mb-3 relative">
-              <span className="text-primary-accent drop-shadow-lg">Welder Qualification</span>
-              <br />
-              <span className="text-white drop-shadow-lg">Calificación de Soldadores</span>
-              <br />
-              <span className="text-secondary-accent text-xl lg:text-2xl label-technical inline-flex items-center gap-2 mt-2">
-                <Sparkles className="w-5 h-5" />
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 sm:mb-3 relative">
+              <span className="text-primary-accent drop-shadow-lg block">Welder Qualification</span>
+              <span className="text-white drop-shadow-lg block">Calificación de Soldadores</span>
+              <span className="text-secondary-accent text-base sm:text-lg md:text-xl lg:text-2xl label-technical inline-flex items-center gap-1 sm:gap-2 mt-1 sm:mt-2">
+                <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
                 EN-ES
-                <Sparkles className="w-5 h-5" />
+                <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
               </span>
             </h1>
             
             {/* Línea decorativa intermedia */}
             <div className="h-0.5 w-48 bg-gradient-to-r from-transparent via-secondary-accent to-transparent mx-auto mb-4"></div>
             
-            <p className="text-lg text-white mb-2 font-semibold max-w-2xl mx-auto leading-relaxed">
+            <p className="text-sm sm:text-base md:text-lg text-white mb-2 font-semibold max-w-2xl mx-auto leading-relaxed px-2">
               "Califica a tus soldadores en <span className="text-primary-accent font-bold">48–72h</span> con trazabilidad completa."
             </p>
-            <p className="text-base text-muted mb-4 max-w-2xl mx-auto font-medium">
+            <p className="text-xs sm:text-sm md:text-base text-muted mb-3 sm:mb-4 max-w-2xl mx-auto font-medium px-2">
               Reduce retrabajos hasta <span className="text-secondary-accent font-bold">30%</span> y supera auditorías sin sorpresas.
             </p>
             
-            <div className="relative aspect-[3/4] max-w-xs mx-auto mb-4 card-standard glow-orange overflow-hidden group">
+            <div className="relative aspect-[3/4] w-full max-w-[200px] sm:max-w-xs mx-auto mb-3 sm:mb-4 card-standard glow-orange overflow-hidden group">
               <Image
                 src="/images/infografia/hero-portada.png"
                 alt="Hero Welder"
@@ -525,7 +535,7 @@ export default function InfografiaViewer() {
           </motion.div>
 
           {/* Grid of Sections */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-5 w-full mb-6 sm:mb-8">
             {infographicSections?.map((section, index) => {
               const IconComponent = section.icon;
               return (
@@ -537,18 +547,18 @@ export default function InfografiaViewer() {
                   className="card-section relative group hover:scale-[1.02] hover:shadow-xl transition-all duration-300"
                 >
                   {/* Número de sección con efecto brillante */}
-                  <div className="absolute top-4 left-4 label-technical-orange bg-primary-accent/20 px-3 py-1 rounded-full text-xs border border-primary-accent/30 backdrop-blur-sm flex items-center gap-1.5 z-10">
-                    <Sparkles className="w-3 h-3" />
+                  <div className="absolute top-2 sm:top-3 md:top-4 left-2 sm:left-3 md:left-4 label-technical-orange bg-primary-accent/20 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[0.65rem] sm:text-xs border border-primary-accent/30 backdrop-blur-sm flex items-center gap-1 sm:gap-1.5 z-10">
+                    <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                     {String(section.id).padStart(2, '0')}
                   </div>
                   
                   {/* Badges de normas en la esquina superior derecha */}
                   {section.badges && (
-                    <div className="absolute top-4 right-4 flex flex-wrap gap-1 justify-end max-w-[60%] z-10">
+                    <div className="absolute top-2 sm:top-3 md:top-4 right-2 sm:right-3 md:right-4 flex flex-wrap gap-0.5 sm:gap-1 justify-end max-w-[55%] sm:max-w-[60%] z-10">
                       {section.badges.map((badge, idx) => (
                         <span 
                           key={idx}
-                          className="text-[0.65rem] px-2 py-0.5 rounded-full bg-secondary-accent/20 text-secondary-accent border border-secondary-accent/30 font-semibold backdrop-blur-sm"
+                          className="text-[0.6rem] sm:text-[0.65rem] px-1.5 sm:px-2 py-0.5 rounded-full bg-secondary-accent/20 text-secondary-accent border border-secondary-accent/30 font-semibold backdrop-blur-sm whitespace-nowrap"
                         >
                           {badge}
                         </span>
@@ -557,7 +567,7 @@ export default function InfografiaViewer() {
                   )}
                   
                   {/* Área de imagen o icono con overlay decorativo */}
-                  <div className={`relative aspect-square mb-4 rounded-lg overflow-hidden border-2 border-primary-accent/20 bg-gradient-to-br ${section.bgColor || 'from-gray-800 to-gray-900'} flex items-center justify-center group-hover:border-primary-accent/40 transition-all duration-300`}>
+                  <div className={`relative aspect-square mb-2 sm:mb-3 md:mb-4 rounded-lg overflow-hidden border-2 border-primary-accent/20 bg-gradient-to-br ${section.bgColor || 'from-gray-800 to-gray-900'} flex items-center justify-center group-hover:border-primary-accent/40 transition-all duration-300`}>
                     {section.image ? (
                       <>
                         <Image
@@ -653,10 +663,10 @@ export default function InfografiaViewer() {
                       {/* Línea decorativa superior */}
                       <div className="h-0.5 w-12 bg-gradient-to-r from-transparent via-primary-accent to-transparent mx-auto mb-3"></div>
                       
-                      <h3 className="text-lg font-bold text-primary-accent mb-2 tracking-tight">
+                      <h3 className="text-base sm:text-lg font-bold text-primary-accent mb-1 sm:mb-2 tracking-tight">
                         {section.titleEn}
                       </h3>
-                      <p className="text-sm text-white font-semibold mb-2">
+                      <p className="text-xs sm:text-sm text-white font-semibold mb-1 sm:mb-2">
                         {section.titleEs}
                       </p>
                       
@@ -664,14 +674,14 @@ export default function InfografiaViewer() {
                       <div className="h-0.5 w-20 bg-gradient-to-r from-transparent via-secondary-accent/30 to-transparent mx-auto mt-3"></div>
                     </div>
                     
-                    <ul className="space-y-3">
+                    <ul className="space-y-2 sm:space-y-3">
                       {section.bullets?.map((bullet, bulletIndex) => (
-                        <li key={bulletIndex} className="text-[0.75rem] leading-relaxed">
-                          <div className="font-semibold text-white flex items-start gap-2">
-                            <span className="text-primary-accent mt-0.5 font-bold text-[0.8rem]">→</span>
-                            <span className="flex-1">{bullet.en}</span>
+                        <li key={bulletIndex} className="text-[0.7rem] sm:text-[0.75rem] leading-relaxed">
+                          <div className="font-semibold text-white flex items-start gap-1.5 sm:gap-2">
+                            <span className="text-primary-accent mt-0.5 font-bold text-[0.7rem] sm:text-[0.8rem] flex-shrink-0">→</span>
+                            <span className="flex-1 break-words">{bullet.en}</span>
                           </div>
-                          <div className="text-muted ml-5 mt-1.5 text-[0.7rem] leading-snug">
+                          <div className="text-muted ml-4 sm:ml-5 mt-1 sm:mt-1.5 text-[0.65rem] sm:text-[0.7rem] leading-snug break-words">
                             {bullet.es}
                           </div>
                         </li>
@@ -700,7 +710,7 @@ export default function InfografiaViewer() {
                 <div className="absolute inset-0 grid-pattern"></div>
               </div>
               
-              <div className="grid md:grid-cols-2 gap-6 items-start relative z-10 p-6 pb-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 items-start relative z-10 p-4 sm:p-6 pb-6 sm:pb-8">
                 {/* Columna izquierda: Información y enlaces */}
                 <div className="space-y-4">
                   {/* Icono y título */}
@@ -709,11 +719,11 @@ export default function InfografiaViewer() {
                       <QrCode className="w-8 h-8 text-secondary-accent" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-xl font-bold text-primary-accent flex items-center gap-2 mb-2">
-                        <Sparkles className="w-5 h-5 flex-shrink-0" />
+                      <h3 className="text-base sm:text-lg md:text-xl font-bold text-primary-accent flex items-center gap-2 mb-2">
+                        <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
                         <span className="break-words">Scan the QR for full checklist & templates</span>
                       </h3>
-                      <p className="text-white font-medium text-sm mt-1">
+                      <p className="text-white font-medium text-xs sm:text-sm mt-1">
                         Escanea el QR para checklist y plantillas
                       </p>
                     </div>
@@ -755,10 +765,10 @@ export default function InfografiaViewer() {
                     <div className="absolute inset-0 -m-4 border-2 border-primary-accent/20 rounded-2xl animate-pulse"></div>
                     <div className="absolute inset-0 -m-6 border border-secondary-accent/10 rounded-2xl"></div>
                     
-                    <div className="bg-white p-5 rounded-xl glow-orange relative z-10 shadow-2xl hover:scale-105 transition-transform duration-300">
+                    <div className="bg-white p-3 sm:p-4 md:p-5 rounded-xl glow-orange relative z-10 shadow-2xl hover:scale-105 transition-transform duration-300 w-full max-w-[150px] sm:max-w-[180px] md:max-w-[200px] mx-auto">
                       <QRCode 
                         value={`${typeof window !== 'undefined' ? window.location.origin : 'https://proyecto-infografia-soldadores.vercel.app'}/infografia?utm_source=qr&utm_medium=infographic&utm_campaign=welder_qualification`}
-                        size={150}
+                        size={windowWidth > 0 ? (windowWidth < 640 ? 120 : windowWidth < 768 ? 150 : 180) : 150}
                         level="H"
                         style={{ height: "auto", maxWidth: "100%", width: "100%" }}
                       />
@@ -791,8 +801,8 @@ export default function InfografiaViewer() {
             </div>
             
             {/* Footer inferior: Copyright y valores */}
-            <div className="pt-6 pb-4 border-t border-gray-800/50">
-              <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
+            <div className="pt-4 sm:pt-6 pb-3 sm:pb-4 border-t border-gray-800/50">
+              <div className="flex flex-col md:flex-row justify-between items-center gap-3 sm:gap-4 text-xs sm:text-sm">
                 {/* Copyright */}
                 <div className="flex items-center gap-2 text-muted flex-wrap justify-center md:justify-start">
                   <Award className="w-4 h-4 text-primary-accent flex-shrink-0" />
