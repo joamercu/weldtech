@@ -1,0 +1,42 @@
+```mermaid
+graph TD
+    A[Root Layout] --> B[Providers]
+    B --> C[SessionProvider]
+    C --> D[Navbar]
+    C --> E[Page Content]
+    C --> F[Footer]
+    
+    E --> G{Route}
+    
+    G -->|/| H[LandingPage]
+    G -->|/infografia| I[InfografiaViewer]
+    G -->|/recursos| J[RecursosPage]
+    G -->|/plantillas| K[PlantillasPage]
+    G -->|/auth/login| L[LoginPage]
+    G -->|/auth/signup| M[SignupPage]
+    
+    J --> N[CalculadoraRangos]
+    J --> O[ComparadorNormas]
+    
+    subgraph "Herramientas"
+        P[/herramientas/posiciones]
+        Q[/herramientas/defectos]
+        R[/herramientas/wps-builder]
+        S[/herramientas/calificaciones]
+    end
+    
+    G --> P & Q & R & S
+    
+    P --> T[PosicionesEquivalencia]
+    Q --> U[GuiaDefectos]
+    R --> V[WPSBuilder]
+    S --> W[QualificationTracker]
+    
+    style A fill:#0F1216
+    style D fill:#FF7A00
+    style F fill:#FF7A00
+    style I fill:#2AA1FF
+    style N fill:#10B981
+    style O fill:#10B981
+```
+

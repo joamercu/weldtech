@@ -1,0 +1,68 @@
+# Ejemplo de Configuración de Documento en Español
+# =================================================
+
+document:
+  title: "Manual de Procedimientos de Soldadura"
+  subtitle: "Procedimientos Cualificados según ASME IX"
+  project: "Proyecto Construcción Naval - Fase 2"
+  client: "Astilleros Industriales del Pacífico S.A."
+  author: "WeldTech Solutions - Equipo Técnico"
+  version: "2.1"
+  revision: "RA-03"
+  date: "2025-11-07"
+  confidentiality: "DOCUMENTO TÉCNICO - USO INTERNO"
+
+version_control:
+  - version: "1.0"
+    date: "2025-01-15"
+    author: "Ing. Carlos Mendoza"
+    description: "Versión inicial del manual"
+  
+  - version: "2.0"
+    date: "2025-06-20"
+    author: "Ing. Ana Torres"
+    description: "Actualización según nueva normativa AWS D1.1-2020"
+  
+  - version: "2.1"
+    date: "2025-11-07"
+    author: "WeldTech Team"
+    description: "Correcciones menores y actualización de imágenes"
+
+metadata:
+  language: "es"
+  include_toc: true
+  toc_depth: 3
+  number_sections: true
+  add_annexes_section: true
+  add_bibliography: false
+  add_glossary: true
+  
+  syntax_highlighting: true
+  code_blocks_theme: "tango"
+  
+  paper_size: "A4"
+  orientation: "portrait"
+  
+  margins:
+    top: 2.54
+    bottom: 2.54
+    left: 3.0
+    right: 2.54
+
+advanced:
+  watermark:
+    enabled: false
+    text: "BORRADOR"
+    opacity: 0.3
+  
+  protection:
+    enabled: false
+    allow_comments: true
+    allow_tracked_changes: true
+  
+  properties:
+    company: "WeldTech Solutions"
+    category: "Manuales Técnicos"
+    keywords: "soldadura, ASME, procedimientos, WPS, cualificación"
+    comments: "Generado automáticamente con MD2Word API"
+

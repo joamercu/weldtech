@@ -1,0 +1,71 @@
+{
+  "backupDate": "2025-11-08",
+  "backupType": "original-images",
+  "description": "Copia de seguridad de imágenes originales de defectos de soldadura antes de implementar mejoras con Abacus.AI",
+  "images": [
+    {
+      "filename": "porosidad.jpg",
+      "defectId": "porosidad",
+      "defectName": "Porosidad",
+      "category": "internal",
+      "severity": "high",
+      "originalPath": "/herramientas/porosidad.jpg",
+      "backupPath": "/herramientas/backup/2025-11-08-original/porosidad.jpg",
+      "description": "Pequeñas cavidades o bolsas de gas dentro del metal de soldadura"
+    },
+    {
+      "filename": "grietas.jpg",
+      "defectId": "grietas",
+      "defectName": "Grietas",
+      "category": "internal",
+      "severity": "high",
+      "originalPath": "/herramientas/grietas.jpg",
+      "backupPath": "/herramientas/backup/2025-11-08-original/grietas.jpg",
+      "description": "Fisuras o fracturas lineales en la soldadura o zona afectada por calor (ZAC)"
+    },
+    {
+      "filename": "undercut.jpg",
+      "defectId": "undercut",
+      "defectName": "Socavado (Undercut)",
+      "category": "dimensional",
+      "severity": "medium",
+      "originalPath": "/herramientas/undercut.jpg",
+      "backupPath": "/herramientas/backup/2025-11-08-original/undercut.jpg",
+      "description": "Ranuras o muescas a lo largo del borde de la soldadura que reducen el área de sección transversal"
+    },
+    {
+      "filename": "escoria.jpg",
+      "defectId": "escoria",
+      "defectName": "Inclusiones de Escoria",
+      "category": "internal",
+      "severity": "medium",
+      "originalPath": "/herramientas/escoria.jpg",
+      "backupPath": "/herramientas/backup/2025-11-08-original/escoria.jpg",
+      "description": "Residuos no metálicos atrapados dentro o sobre la superficie de soldadura"
+    },
+    {
+      "filename": "salpicaduras.jpg",
+      "defectId": "salpicaduras",
+      "defectName": "Salpicaduras",
+      "category": "surface",
+      "severity": "low",
+      "originalPath": "/herramientas/salpicaduras.jpg",
+      "backupPath": "/herramientas/backup/2025-11-08-original/salpicaduras.jpg",
+      "description": "Pequeños glóbulos o gotas de metal adheridos a la superficie de soldadura"
+    },
+    {
+      "filename": "sobreposicion.jpg",
+      "defectId": "sobreposicion",
+      "defectName": "Sobreposición (Overlap)",
+      "category": "dimensional",
+      "severity": "medium",
+      "originalPath": "/herramientas/sobreposicion.jpg",
+      "backupPath": "/herramientas/backup/2025-11-08-original/sobreposicion.jpg",
+      "description": "Metal de soldadura en exceso que sobresale sin fusionarse adecuadamente"
+    }
+  ],
+  "totalImages": 6,
+  "createdBy": "Plan de Mejora de Imágenes de Defectos",
+  "version": "1.0"
+}
+

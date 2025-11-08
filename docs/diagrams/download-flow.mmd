@@ -1,0 +1,26 @@
+```mermaid
+flowchart TD
+    A[Usuario click Descargar] --> B{¿Está autenticado?}
+    
+    B -->|Sí| C[hasWatermark = false]
+    B -->|No| D[hasWatermark = true]
+    
+    C --> E[Genera imagen limpia]
+    D --> F[Aplica marca de agua]
+    
+    E --> G[Descarga archivo]
+    F --> G
+    
+    G --> H[POST /api/downloads/track]
+    
+    H --> I[Registra en Database]
+    I --> J[(Download record<br/>userId, documentType,<br/>hasWatermark, timestamp)]
+    
+    J --> K[Analytics Dashboard]
+    
+    style B fill:#FF7A00
+    style C fill:#10B981
+    style D fill:#F59E0B
+    style J fill:#2AA1FF
+```
+

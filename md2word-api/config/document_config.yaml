@@ -1,0 +1,88 @@
+# Configuración de Documento por Defecto
+# ========================================
+# Este archivo define la estructura y metadatos del documento a generar.
+# Puede ser sobreescrito pasando un config personalizado.
+
+document:
+  # Información principal del documento
+  title: "Guía de Cualificación de Soldadores"
+  subtitle: "ASME Section IX"
+  
+  # Información del proyecto
+  project: "Proyecto Ejemplo WeldTech"
+  client: "Cliente Ejemplo S.A."
+  
+  # Autoría y versión
+  author: "WeldTech Solutions"
+  version: "1.0"
+  revision: "RA-00"
+  date: "2025-11-07"
+  
+  # Clasificación del documento
+  confidentiality: "DOCUMENTO TÉCNICO - CONFIDENCIAL"
+
+# Control de versiones del documento
+version_control:
+  - version: "1.0"
+    date: "2025-11-07"
+    author: "WeldTech Team"
+    description: "Versión inicial del documento"
+  
+  # - version: "1.1"
+  #   date: "2025-11-15"
+  #   author: "Juan Pérez"
+  #   description: "Actualización de sección 3"
+
+# Metadatos y configuración
+metadata:
+  # Idioma del documento (es/en)
+  language: "es"
+  
+  # Tabla de contenido
+  include_toc: true
+  toc_depth: 3
+  
+  # Numeración de secciones
+  number_sections: true
+  
+  # Secciones adicionales
+  add_annexes_section: false
+  add_bibliography: false
+  add_glossary: false
+  
+  # Configuración de conversión
+  syntax_highlighting: true
+  code_blocks_theme: "tango"
+  
+  # Formato de página
+  paper_size: "A4"  # A4, Letter, Legal
+  orientation: "portrait"  # portrait, landscape
+  
+  # Márgenes (en cm)
+  margins:
+    top: 2.54
+    bottom: 2.54
+    left: 2.54
+    right: 2.54
+
+# Opciones avanzadas
+advanced:
+  # Marca de agua
+  watermark:
+    enabled: false
+    text: "BORRADOR"
+    opacity: 0.3
+  
+  # Protección del documento
+  protection:
+    enabled: false
+    allow_comments: true
+    allow_tracked_changes: false
+  
+  # Propiedades del archivo
+  properties:
+    company: "WeldTech Solutions"
+    category: "Documentación Técnica"
+    keywords: "soldadura, cualificación, ASME, procedimientos"
+    comments: "Generado con MD2Word API"
+

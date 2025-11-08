@@ -1,0 +1,33 @@
+```mermaid
+graph TB
+    subgraph "Cliente (Browser)"
+        A[Usuario] --> B[React App]
+        B --> C[Next.js Pages]
+        B --> D[Client Components]
+    end
+    
+    subgraph "Next.js Server"
+        C --> E[API Routes]
+        D --> E
+        E --> F[NextAuth API]
+        E --> G[Downloads API]
+        E --> H[Server Components]
+    end
+    
+    subgraph "Data Layer"
+        F --> I[Prisma ORM]
+        G --> I
+        H --> I
+        I --> J[(PostgreSQL)]
+    end
+    
+    subgraph "External Services"
+        F -.-> K[Google OAuth]
+    end
+    
+    style A fill:#FF7A00
+    style J fill:#2AA1FF
+    style F fill:#10B981
+    style G fill:#10B981
+```
+

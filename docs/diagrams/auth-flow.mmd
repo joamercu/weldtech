@@ -1,0 +1,27 @@
+```mermaid
+sequenceDiagram
+    actor User
+    participant Form as Login Form
+    participant NextAuth
+    participant DB as Database
+    participant Session
+    
+    User->>Form: Ingresa email/password
+    Form->>NextAuth: signIn(credentials)
+    NextAuth->>DB: findUnique(email)
+    DB-->>NextAuth: User data
+    NextAuth->>NextAuth: bcrypt.compare(password)
+    
+    alt Credenciales válidas
+        NextAuth->>NextAuth: Genera JWT token
+        NextAuth->>Session: Set HTTP-only cookie
+        NextAuth-->>Form: Success
+        Form->>User: Redirect a /
+    else Credenciales inválidas
+        NextAuth-->>Form: Error
+        Form->>User: Mostrar error
+    end
+    
+    Note over User,Session: Usuario autenticado puede<br/>descargar sin marca de agua
+```
+

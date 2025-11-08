@@ -1,0 +1,206 @@
+# Configuración de Marca WeldTech Solutions
+# Basado en Manual de Imagen Corporativa v1.0
+# =============================================
+
+brand:
+  name: "WeldTech Solutions"
+  tagline: "Transformando normativas complejas en herramientas prácticas"
+  philosophy: "La convergencia entre excelencia técnica y claridad informativa"
+  positioning: "La referencia técnica para profesionales de soldadura que buscan certificación internacional con trazabilidad total"
+  
+  values:
+    - "Precisión Técnica: Cada detalle cuenta en nuestro trabajo"
+    - "Claridad: Transformamos lo complejo en comprensible"
+    - "Elite: No somos para todos, somos para los mejores"
+    - "Escalabilidad: Diseñados para crecer sin perder esencia"
+    - "Bilingüismo: Español e inglés como estándar"
+
+# Paleta de Colores
+colors:
+  primary:
+    dark_steel: "#0F1216"      # Principal - Fondos, textos primarios
+    weld_orange: "#FF7A00"     # Acento Principal - CTAs, highlights
+    precision_blue: "#2AA1FF"  # Acento Secundario - Enlaces, confianza
+  
+  secondary:
+    steel_gray: "#6B7280"      # Textos secundarios, bordes
+    light_steel: "#E5E7EB"     # Fondos alternativos, hover
+    pure_white: "#FFFFFF"      # Textos sobre fondos oscuros
+  
+  status:
+    success: "#10B981"         # Mensajes de éxito, verificación
+    warning: "#F59E0B"         # Alertas, información importante
+    error: "#EF4444"           # Errores, acciones destructivas
+  
+  # Información adicional de colores (referencia)
+  pantone:
+    dark_steel: "Black 6 C"
+    weld_orange: "1505 C"
+    precision_blue: "2995 C"
+  
+  cmyk:
+    dark_steel: [95, 90, 82, 75]
+    weld_orange: [0, 65, 100, 0]
+    precision_blue: [75, 30, 0, 0]
+
+# Tipografía
+fonts:
+  headings:
+    family: "Montserrat"
+    description: "Geométrica, moderna, técnica"
+    weights: [500, 600, 700]  # Medium, SemiBold, Bold
+    use: "Títulos, encabezados, CTAs"
+  
+  body:
+    family: "Inter"
+    description: "Legible, versátil, optimizada para pantallas"
+    weights: [400, 500, 600]  # Regular, Medium, SemiBold
+    use: "Párrafos, descripciones, listas, textos largos"
+
+# Jerarquía Tipográfica
+typography:
+  h1:
+    size: 48
+    weight: 700
+    line_height: 1.2
+    letter_spacing: -0.02
+    color: "weld_orange"
+    font_family: "Montserrat"
+  
+  h2:
+    size: 36
+    weight: 600
+    line_height: 1.3
+    letter_spacing: -0.01
+    color: "precision_blue"
+    font_family: "Montserrat"
+  
+  h3:
+    size: 28
+    weight: 500
+    line_height: 1.4
+    letter_spacing: 0
+    color: "steel_gray"
+    font_family: "Montserrat"
+  
+  h4:
+    size: 24
+    weight: 500
+    line_height: 1.4
+    color: "steel_gray"
+    font_family: "Montserrat"
+  
+  body:
+    size: 16
+    weight: 400
+    line_height: 1.6
+    color: "dark_steel"
+    font_family: "Inter"
+  
+  body_large:
+    size: 18
+    weight: 400
+    line_height: 1.6
+    color: "dark_steel"
+    font_family: "Inter"
+  
+  body_small:
+    size: 14
+    weight: 400
+    line_height: 1.5
+    color: "steel_gray"
+    font_family: "Inter"
+  
+  caption:
+    size: 12
+    weight: 400
+    line_height: 1.4
+    color: "steel_gray"
+    font_family: "Inter"
+
+# Assets de la Marca
+assets:
+  logo: "assets/weldtech/logo.png"
+  logo_small: "assets/weldtech/logo_small.png"
+  logo_horizontal: "assets/weldtech/weldtech-horizontal-full-color.png"
+  logo_vertical: "assets/weldtech/weldtech-vertical-full-color.png"
+  logo_symbol: "assets/weldtech/weldtech-symbol-only.jpg"
+  hero_background: "assets/weldtech/hero_background.jpg"
+  watermark: "assets/weldtech/watermark.png"
+
+# Espaciado y Layout
+spacing:
+  base_unit: 8  # píxeles
+  section_padding: 64
+  element_margin: 24
+  line_spacing: 1.6
+
+# Configuración de Documentos Word
+word_styles:
+  page:
+    margin_top: 2.54  # cm
+    margin_bottom: 2.54
+    margin_left: 2.54
+    margin_right: 2.54
+    paper_size: "A4"
+  
+  cover:
+    background_color: "dark_steel"
+    title_color: "weld_orange"
+    subtitle_color: "precision_blue"
+    text_color: "pure_white"
+    logo_position: "top_right"
+    logo_size: "medium"
+  
+  header:
+    height: 1.5  # cm
+    logo_size: "small"
+    text_color: "steel_gray"
+    border_color: "light_steel"
+    border_width: 1  # pt
+  
+  footer:
+    height: 1.5  # cm
+    text_color: "steel_gray"
+    page_number_position: "center"
+    confidentiality_position: "left"
+  
+  tables:
+    header_background: "weld_orange"
+    header_text_color: "pure_white"
+    row_alternate_background: "light_steel"
+    border_color: "steel_gray"
+    border_width: 1  # pt
+  
+  code_blocks:
+    background: "light_steel"
+    text_color: "dark_steel"
+    border_color: "steel_gray"
+    font_family: "Courier New"
+
+# Texto por Defecto
+default_texts:
+  es:
+    confidentiality: "DOCUMENTO TÉCNICO - CONFIDENCIAL"
+    page_of: "Página {page} de {total}"
+    version: "Versión"
+    revision: "Revisión"
+    date: "Fecha"
+    author: "Autor"
+    project: "Proyecto"
+    client: "Cliente"
+    table_of_contents: "Tabla de Contenido"
+    version_control: "Control de Versiones"
+  
+  en:
+    confidentiality: "TECHNICAL DOCUMENT - CONFIDENTIAL"
+    page_of: "Page {page} of {total}"
+    version: "Version"
+    revision: "Revision"
+    date: "Date"
+    author: "Author"
+    project: "Project"
+    client: "Client"
+    table_of_contents: "Table of Contents"
+    version_control: "Version Control"
+
