@@ -333,7 +333,25 @@ export class PDFBuilder {
    */
   private async addMainContent(html: string): Promise<void> {
     // Parsear HTML con jsdom
-    const dom = new JSDOM(html);
+    // Configurar JSDOM para no cargar recursos externos durante el build
+    // Evitar cargar recursos CSS que no existen durante el build
+    const dom = new JSDOM(html, {
+      url: 'about:blank',
+      referrer: '',
+      contentType: 'text/html',
+      includeNodeLocations: false,
+      storageQuota: 10000000,
+      resources: 'usable',
+      runScripts: 'outside-only',
+      pretendToBeVisual: false,
+      // Deshabilitar la carga de recursos durante el build
+      beforeParse(window: any) {
+        // Evitar que JSDOM intente cargar recursos CSS
+        if (process.env.NEXT_PHASE === 'phase-production-build') {
+          window.document.defaultView = null;
+        }
+      },
+    });
     const document = dom.window.document;
     const body = document.body;
     

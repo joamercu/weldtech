@@ -4,9 +4,46 @@ import { JSDOM } from 'jsdom';
 import fs from 'fs';
 import path from 'path';
 
-// Inicializar DOMPurify para Node.js
-const window = new JSDOM('').window;
-const DOMPurify = createDOMPurify(window as any);
+// Inicializar DOMPurify para Node.js de manera lazy
+// Configurar JSDOM para no cargar recursos externos durante el build
+let domPurifyInstance: ReturnType<typeof createDOMPurify> | null = null;
+
+function getDOMPurify() {
+  if (!domPurifyInstance) {
+    // Inicializar JSDOM solo cuando se necesite, no durante el build
+    if (process.env.NEXT_PHASE === 'phase-production-build') {
+      // Durante el build, crear una instancia mínima sin recursos
+      const window = new JSDOM('', {
+        url: 'about:blank',
+        referrer: '',
+        contentType: 'text/html',
+        includeNodeLocations: false,
+        storageQuota: 10000000,
+        resources: 'usable',
+        runScripts: 'outside-only',
+        pretendToBeVisual: false,
+        beforeParse(window: any) {
+          // Evitar que JSDOM intente cargar recursos CSS durante el build
+          window.document.defaultView = null;
+        },
+      }).window;
+      domPurifyInstance = createDOMPurify(window as any);
+    } else {
+      const window = new JSDOM('', {
+        url: 'about:blank',
+        referrer: '',
+        contentType: 'text/html',
+        includeNodeLocations: false,
+        storageQuota: 10000000,
+        resources: 'usable',
+        runScripts: 'outside-only',
+        pretendToBeVisual: false,
+      }).window;
+      domPurifyInstance = createDOMPurify(window as any);
+    }
+  }
+  return domPurifyInstance;
+}
 
 // Configurar marked para usar async
 marked.setOptions({
@@ -28,6 +65,7 @@ export async function processMarkdownToHTML(markdownPath: string): Promise<strin
     const html = await marked.parse(markdownContent);
     
     // Sanitizar HTML
+    const DOMPurify = getDOMPurify();
     const cleanHTML = DOMPurify.sanitize(html, {
       ALLOWED_TAGS: [
         'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
@@ -61,6 +99,7 @@ export async function processMarkdownString(markdownContent: string): Promise<st
     const html = await marked.parse(markdownContent);
     
     // Sanitizar HTML
+    const DOMPurify = getDOMPurify();
     const cleanHTML = DOMPurify.sanitize(html, {
       ALLOWED_TAGS: [
         'h1', 'h2', 'h3', 'h4', 'h5', 'h6',

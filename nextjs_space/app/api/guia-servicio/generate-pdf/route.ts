@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
-import { generateServiceGuidePDF } from '@/lib/pdf/pdf-builder';
 import { trackDownload } from '@/lib/watermark';
 
 export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+export const revalidate = 0;
 
 /**
  * API Route para generar y descargar la Guía de Servicio en PDF
@@ -23,6 +24,8 @@ export async function GET(request: NextRequest) {
     }
 
     // 2. Generar PDF con información del usuario
+    // Importación dinámica para evitar problemas durante el build
+    const { generateServiceGuidePDF } = await import('@/lib/pdf/pdf-builder');
     const pdfBuffer = await generateServiceGuidePDF({
       userId: (session.user as any).id || session.user.email || 'unknown',
       userName: session.user.name || null,
